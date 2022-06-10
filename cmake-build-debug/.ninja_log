@@ -1,0 +1,20 @@
+# ninja log v5
+6	682	6765482279285898	CMakeFiles/search_engine.dir/main.cpp.obj	ab41beb0cedacd8f
+682	967	6765482282108459	search_engine.exe	450fd960135d5739
+5	897	6765523978349234	CMakeFiles/search_engine.dir/main.cpp.obj	ab41beb0cedacd8f
+23	4747	6765524016754340	CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj	9158fbf7831a922c
+4750	5868	6765524027994748	search_engine.exe	2a074ae32cb04d17
+8	4259	6765525240081290	CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj	9158fbf7831a922c
+4260	5338	6765525250851137	search_engine.exe	2a074ae32cb04d17
+6	718	6765531257610038	CMakeFiles/search_engine.dir/main.cpp.obj	ab41beb0cedacd8f
+23	4263	6765531292992148	CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj	9158fbf7831a922c
+4264	5347	6765531303841995	search_engine.exe	2a074ae32cb04d17
+7	4251	6765531721832364	CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj	9158fbf7831a922c
+4251	5326	6765531732632368	search_engine.exe	2a074ae32cb04d17
+6	729	6765544100403107	CMakeFiles/search_engine.dir/main.cpp.obj	ab41beb0cedacd8f
+25	4217	6765544135224877	CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj	9158fbf7831a922c
+4217	5282	6765544145844340	search_engine.exe	2a074ae32cb04d17
+7	722	6765544372886147	CMakeFiles/search_engine.dir/main.cpp.obj	ab41beb0cedacd8f
+723	1793	6765544383495776	search_engine.exe	2a074ae32cb04d17
+6	4199	6765555312138328	CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj	9158fbf7831a922c
+4200	5267	6765555322808080	search_engine.exe	2a074ae32cb04d17
