@@ -1,19 +1,21 @@
 #ifndef SEARCH_ENGINE_CONVERTERJSON_H
 #define SEARCH_ENGINE_CONVERTERJSON_H
 
-
-
 /**
 * Класс для работы с JSON-файлами
 */
 class ConverterJSON {
 private:
-    nlohmann::json configJson;
-    std::vector<std::string> fileNames;
-    int responsesLimit = 0;
-    bool configIsLoaded = false;
+    std::vector<std::string> _fileNames;
+    std::vector<std::string> _textDocs;
+    int _responsesLimit = 0;
+    bool _configIsLoaded = false;
+    bool _textIsLoaded = false;
 
     void LoadConfig();
+    void LoadTextDocs();
+    static std::string FileNameNormalize(std::string_view fileName);
+    static std::string IndexToString3(size_t index);
 
 public:
     ConverterJSON() = default;
@@ -41,7 +43,7 @@ public:
 /**
 * Положить в файл answers.json результаты поисковых запросов
 */
-    void PutAnswers(std::vector<std::vector<std::pair<int, float>>> answers);
+    void PutAnswers(const std::vector<std::vector<std::pair<int, float>>>& answers);
 };
 
 #endif //SEARCH_ENGINE_CONVERTERJSON_H
