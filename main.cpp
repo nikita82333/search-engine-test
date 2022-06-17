@@ -1,6 +1,10 @@
 #include <iostream>
 #include <vector>
+#include <map>
 #include "ConverterJSON.h"
+#include "InvertedIndex.h"
+
+//http://ci-plus-plus-snachala.ru/?p=11
 
 int main() {
     ConverterJSON converterJson;
@@ -10,7 +14,7 @@ int main() {
     for (const auto& textDoc : textDocs) {
         std::cout << textDoc << std::endl;
     }
-
+/*
     std::cout << converterJson.GetResponsesLimit() << std::endl;
 
     std::vector<std::string> requests;
@@ -29,8 +33,18 @@ int main() {
     answers.push_back(answer3);
 
     converterJson.PutAnswers(answers);
+*/
 
+    InvertedIndex invertedIndex;
+    //std::vector<std::string> inputDocs;
 
+    invertedIndex.UpdateDocumentBase(textDocs);
+    std::vector<Entry> entry;
+    entry = invertedIndex.GetWordCount("capital");
+
+    for (auto [docId, count] : entry) {
+        std::cout << docId << ", " << count << std::endl;
+    }
 
     return 0;
 }

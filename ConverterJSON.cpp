@@ -107,8 +107,8 @@ void ConverterJSON::PutAnswers(const std::vector<std::vector<std::pair<int, floa
                 }
                 else {
                     size_t docNumber = 0;
-                    for (const auto& [docid, rank]: answer) {
-                        answersJson["answers"][requestString]["relevance"][docNumber]["docid"] = docid;
+                    for (const auto& [docId, rank]: answer) {
+                        answersJson["answers"][requestString]["relevance"][docNumber]["docid"] = docId;
                         answersJson["answers"][requestString]["relevance"][docNumber]["rank"] = rank;
                         ++docNumber;
                     }
