@@ -7,10 +7,6 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 add_subdirectory(nlohmann_json)
 
-#add_executable(search_engine main.cpp ConverterJSON.cpp InvertedIndex.cpp)
-add_executable(search_engine main.cpp ConverterJSON.cpp InvertedIndex.cpp test1.cpp test2.cpp SearchServer.cpp SearchServer.h)
-
-#target_link_libraries(search_engine PRIVATE nlohmann_json::nlohmann_json)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -24,8 +20,10 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 enable_testing()
 
-#target_link_libraries(search_engine PRIVATE nlohmann_json::nlohmann_json gtest_main)
-target_link_libraries(search_engine PRIVATE nlohmann_json::nlohmann_json gtest)
+add_executable(search_engine main.cpp ConverterJSON.cpp InvertedIndex.cpp SearchServer.cpp test2.cpp test3.cpp)
+#add_executable(search_engine ConverterJSON.cpp InvertedIndex.cpp SearchServer.cpp test2.cpp test3.cpp)
+
+target_link_libraries(search_engine PRIVATE nlohmann_json::nlohmann_json gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(search_engine)

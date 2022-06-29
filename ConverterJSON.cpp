@@ -1,20 +1,19 @@
 //#include <string>
-//#include <sstream>
+#include <sstream>
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include "nlohmann/json.hpp"
 #include "ConverterJSON.h"
 
-std::string ConverterJSON::FileNameNormalize(std::string_view fileName) {
+std::string ConverterJSON::NormalizeFileName(std::string_view fileName) {
     std::string normalFileName;
     size_t startIndex = 0;
     if (fileName[0] == '/') startIndex = 1;
     for (size_t i = startIndex; i < fileName.length(); ++i) {
         if (fileName[i] == '/') {
             normalFileName += "\\";
-        }
-        else {
+        } else {
             normalFileName += fileName[i];
         }
     }
@@ -30,15 +29,25 @@ void ConverterJSON::LoadConfig() {
         _responsesLimit = configJson["config"]["max_responses"];
         _configIsLoaded = true;
         configFile.close();
-    }
-    else {
+    } else {
         throw "Config file not found!";
     }
 }
 
-void ConverterJSON::LoadTextDocs() {
+std::string ConverterJSON::IndexToString3(size_t index) {
+    std::ostringstream sStream;
+    if (index < 1000) {
+        sStream << std::setw(3) << std::setfill('0') << std::to_string(index);
+        return sStream.str();
+    } else
+        return "000";
+}
+
+std::vector<std::string> ConverterJSON::GetTextDocuments() {
+    if (!_configIsLoaded) LoadConfig();
+    std::vector<std::string> textDocs;
     for (const auto& fileName : _fileNames) {
-        std::ifstream textFile(FileNameNormalize(fileName));
+        std::ifstream textFile(NormalizeFileName(fileName));
         if (textFile.is_open()) {
             std::string text;
             textFile >> text;
@@ -47,31 +56,14 @@ void ConverterJSON::LoadTextDocs() {
                 textFile >> word;
                 text += " " + word;
             }
-            _textDocs.push_back(text);
+            textDocs.emplace_back(text);
             textFile.close();
-        }
-        else {
+        } else {
             std::cerr << "File \"" << fileName << "\" is not exist!" << std::endl;
         }
     }
-    _textIsLoaded = true;
-}
 
-std::string ConverterJSON::IndexToString3(size_t index) {
-    std::ostringstream sStream;
-    if (index < 1000) {
-        sStream << std::setw(3) << std::setfill('0') << std::to_string(index);
-        return sStream.str();
-    }
-    else
-        return "000";
-}
-
-std::vector<std::string> ConverterJSON::GetTextDocuments() {
-    if (!_configIsLoaded) LoadConfig();
-    if (!_textIsLoaded) LoadTextDocs();
-
-    return _textDocs;
+    return textDocs;
 }
 
 int ConverterJSON::GetResponsesLimit() {
@@ -104,8 +96,7 @@ void ConverterJSON::PutAnswers(const std::vector<std::vector<std::pair<int, floa
                 if (answer.size() == 1) {
                     answersJson["answers"][requestString]["docid"] = answer[0].first;
                     answersJson["answers"][requestString]["rank"] = answer[0].second;
-                }
-                else {
+                } else {
                     size_t docNumber = 0;
                     for (const auto& [docId, rank]: answer) {
                         answersJson["answers"][requestString]["relevance"][docNumber]["docid"] = docId;
@@ -113,19 +104,14 @@ void ConverterJSON::PutAnswers(const std::vector<std::vector<std::pair<int, floa
                         ++docNumber;
                     }
                 }
-            }
-            else {
+            } else {
                 answersJson["answers"][requestString]["result"] = "false";
             }
             ++requestNumber;
         }
         answersFile << answersJson;
         answersFile.close();
-    }
-    else {
+    } else {
         std::cerr << "File \"answers.json\" is occupied by another process!" << std::endl;
     }
 }
-
-
-

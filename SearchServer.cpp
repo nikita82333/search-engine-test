@@ -1,36 +1,57 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <map>
-#include <set>
+#include <unordered_set>
+#include <algorithm>
+#include "ConverterJSON.h"
 #include "InvertedIndex.h"
-//#include "ConverterJSON.h"
 #include "SearchServer.h"
 
 std::vector<std::vector<RelativeIndex>> SearchServer::Search(const std::vector<std::string> &queriesInput) {
-//    ConverterJSON converterJson;
-//    InvertedIndex invertedIndex;
-    std::vector<std::string> inputDocs;
-    _index.UpdateDocumentBase(inputDocs);
-//    std::vector<std::string> requests = converterJson.GetRequests();
-
+    ConverterJSON converterJson;
+    std::vector<std::vector<RelativeIndex>> relativeIndex;
     for (const auto& request : queriesInput) {
         std::string currentWord;
-        std::set<std::string> wordSet;
-        for (const auto& symbol : request) {
-            if (std::isalnum(symbol)) {
-                currentWord += symbol;
-            }
-            else if (currentWord.length() != 0) {
-                wordSet.insert(currentWord);
-                currentWord = "";
+        std::unordered_set<std::string> wordSet;
+        std::istringstream sString {request};
+        while (sString >> currentWord) { //split text to words
+            wordSet.insert(currentWord);
+        }
+        std::map<size_t, std::vector<std::pair<std::string, size_t>>> docWordsCount; //doc -> {word, count}
+        for (const auto& word : wordSet) {
+            for (const auto& [docId, count] : _index.GetWordCount(word)) {
+                if (count != 0) {
+                    if (docWordsCount.count(docId) == 0) {
+                        docWordsCount[docId] = std::vector{std::make_pair(word, count)};
+                    } else {
+                        docWordsCount[docId].emplace_back(std::make_pair(word, count));
+                    }
+                }
             }
         }
-        std::vector<std::pair<std::string, size_t>> wordsCount;
-        for (auto& word : wordSet) {
-            wordsCount.emplace_back(std::make_pair(word, _index.GetWordCount(word)[0].count));
+        std::vector<RelativeIndex> currentRelativeIndex;
+        size_t maxRelevance = 0;
+        for (const auto& [docId, wordsCount] : docWordsCount) {
+            size_t relevance = 0;
+            for (const auto& [word, count] : wordsCount) {
+                relevance += count;
+            }
+            if (relevance > maxRelevance) maxRelevance = relevance;
+            currentRelativeIndex.emplace_back(RelativeIndex{docId, static_cast<float>(relevance)});
         }
+        for (auto& [docId, rank] : currentRelativeIndex) {
+            rank /= static_cast<float>(maxRelevance);
+        }
+        std::stable_sort(currentRelativeIndex.begin(), currentRelativeIndex.end(),
+                         [](const RelativeIndex& a, const RelativeIndex& b) {
+                             return b.rank < a.rank;
+                         });
+
+        size_t responsesLimit = converterJson.GetResponsesLimit();
+        if (currentRelativeIndex.size() > responsesLimit) currentRelativeIndex.resize(responsesLimit);
+        relativeIndex.emplace_back(currentRelativeIndex);
     }
 
-
-    return std::vector<std::vector<RelativeIndex>>();
+    return relativeIndex;
 }

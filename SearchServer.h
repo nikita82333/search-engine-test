@@ -9,6 +9,7 @@ struct RelativeIndex {
         return (docId == other.docId && rank == other.rank);
     }
 };
+
 class SearchServer {
 public:
 /**

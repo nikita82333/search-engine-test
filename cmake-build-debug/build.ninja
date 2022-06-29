@@ -47,7 +47,7 @@ cmake_ninja_workdir = C$:/Users/kunv/CLionProjects/search_engine/cmake-build-deb
 #############################################
 # Order-only phony target for search_engine
 
-build cmake_object_order_depends_target_search_engine: phony || cmake_object_order_depends_target_gtest
+build cmake_object_order_depends_target_search_engine: phony || cmake_object_order_depends_target_gtest cmake_object_order_depends_target_gtest_main
 
 build CMakeFiles/search_engine.dir/main.cpp.obj: CXX_COMPILER__search_engine_Debug C$:/Users/kunv/CLionProjects/search_engine/main.cpp || cmake_object_order_depends_target_search_engine
   DEP_FILE = CMakeFiles\search_engine.dir\main.cpp.obj.d
@@ -70,8 +70,8 @@ build CMakeFiles/search_engine.dir/InvertedIndex.cpp.obj: CXX_COMPILER__search_e
   OBJECT_DIR = CMakeFiles\search_engine.dir
   OBJECT_FILE_DIR = CMakeFiles\search_engine.dir
 
-build CMakeFiles/search_engine.dir/test1.cpp.obj: CXX_COMPILER__search_engine_Debug C$:/Users/kunv/CLionProjects/search_engine/test1.cpp || cmake_object_order_depends_target_search_engine
-  DEP_FILE = CMakeFiles\search_engine.dir\test1.cpp.obj.d
+build CMakeFiles/search_engine.dir/SearchServer.cpp.obj: CXX_COMPILER__search_engine_Debug C$:/Users/kunv/CLionProjects/search_engine/SearchServer.cpp || cmake_object_order_depends_target_search_engine
+  DEP_FILE = CMakeFiles\search_engine.dir\SearchServer.cpp.obj.d
   FLAGS = -g
   INCLUDES = -IC:/Users/kunv/CLionProjects/search_engine/nlohmann_json/single_include -isystem C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include -isystem C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest
   OBJECT_DIR = CMakeFiles\search_engine.dir
@@ -84,8 +84,8 @@ build CMakeFiles/search_engine.dir/test2.cpp.obj: CXX_COMPILER__search_engine_De
   OBJECT_DIR = CMakeFiles\search_engine.dir
   OBJECT_FILE_DIR = CMakeFiles\search_engine.dir
 
-build CMakeFiles/search_engine.dir/SearchServer.cpp.obj: CXX_COMPILER__search_engine_Debug C$:/Users/kunv/CLionProjects/search_engine/SearchServer.cpp || cmake_object_order_depends_target_search_engine
-  DEP_FILE = CMakeFiles\search_engine.dir\SearchServer.cpp.obj.d
+build CMakeFiles/search_engine.dir/test3.cpp.obj: CXX_COMPILER__search_engine_Debug C$:/Users/kunv/CLionProjects/search_engine/test3.cpp || cmake_object_order_depends_target_search_engine
+  DEP_FILE = CMakeFiles\search_engine.dir\test3.cpp.obj.d
   FLAGS = -g
   INCLUDES = -IC:/Users/kunv/CLionProjects/search_engine/nlohmann_json/single_include -isystem C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include -isystem C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest
   OBJECT_DIR = CMakeFiles\search_engine.dir
@@ -99,9 +99,9 @@ build CMakeFiles/search_engine.dir/SearchServer.cpp.obj: CXX_COMPILER__search_en
 #############################################
 # Link the executable search_engine.exe
 
-build search_engine.exe search_engine[1]_tests.cmake | ${cmake_ninja_workdir}search_engine[1]_tests.cmake: CXX_EXECUTABLE_LINKER__search_engine_Debug CMakeFiles/search_engine.dir/main.cpp.obj CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj CMakeFiles/search_engine.dir/InvertedIndex.cpp.obj CMakeFiles/search_engine.dir/test1.cpp.obj CMakeFiles/search_engine.dir/test2.cpp.obj CMakeFiles/search_engine.dir/SearchServer.cpp.obj | lib/libgtestd.a || lib/libgtestd.a
+build search_engine.exe search_engine[1]_tests.cmake | ${cmake_ninja_workdir}search_engine[1]_tests.cmake: CXX_EXECUTABLE_LINKER__search_engine_Debug CMakeFiles/search_engine.dir/main.cpp.obj CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj CMakeFiles/search_engine.dir/InvertedIndex.cpp.obj CMakeFiles/search_engine.dir/SearchServer.cpp.obj CMakeFiles/search_engine.dir/test2.cpp.obj CMakeFiles/search_engine.dir/test3.cpp.obj | lib/libgtest_maind.a lib/libgtestd.a || lib/libgtest_maind.a lib/libgtestd.a
   FLAGS = -g
-  LINK_LIBRARIES = lib/libgtestd.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_LIBRARIES = lib/libgtest_maind.a  lib/libgtestd.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\search_engine.dir
   POST_BUILD = cmd.exe /C "cd /D C:\Users\kunv\CLionProjects\search_engine\cmake-build-debug && "C:\Program Files\JetBrains\CLion 2022.1.2\bin\cmake\win\bin\cmake.exe" -D TEST_TARGET=search_engine -D TEST_EXECUTABLE=C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug/search_engine.exe -D TEST_EXECUTOR= -D TEST_WORKING_DIR=C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=search_engine_TESTS -D CTEST_FILE=C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug/search_engine[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P "C:/Program Files/JetBrains/CLion 2022.1.2/bin/cmake/win/share/cmake-3.22/Modules/GoogleTestAddTests.cmake""
   PRE_LINK = cd .

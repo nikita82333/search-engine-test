@@ -18,7 +18,7 @@ public:
 * Обновить или заполнить базу документов, по которой будем совершать поиск
 * @param inputDocs содержимое документов
 */
-    void UpdateDocumentBase(std::vector<std::string>& inputDocs);
+    void UpdateDocumentBase(const std::vector<std::string>& inputDocs);
 /**
 * Метод определяет количество вхождений слова word в загруженной базе документов
 * @param word слово, частоту вхождений которого необходимо определить

@@ -7,14 +7,11 @@
 class ConverterJSON {
 private:
     std::vector<std::string> _fileNames;
-    std::vector<std::string> _textDocs;
     int _responsesLimit = 0;
     bool _configIsLoaded = false;
-    bool _textIsLoaded = false;
 
     void LoadConfig();
-    void LoadTextDocs();
-    static std::string FileNameNormalize(std::string_view fileName);
+    static std::string NormalizeFileName(std::string_view fileName);
     static std::string IndexToString3(size_t index);
 
 public:

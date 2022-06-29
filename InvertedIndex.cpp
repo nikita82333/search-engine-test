@@ -1,43 +1,35 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <map>
 #include <thread>
 #include <mutex>
 #include "InvertedIndex.h"
-//#include "ConverterJSON.h"
 
-void InvertedIndex::UpdateDocumentBase(std::vector<std::string>& inputDocs) {
-//    ConverterJSON converterJson;
-//    _docs = converterJson.GetTextDocuments();
+void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& inputDocs) {
     _docs = inputDocs;
-    std::mutex freqDictAccess;
+    std::mutex freqDictionaryAccess;
     std::vector<std::thread> threads;
     size_t docId = 0;
     for (const auto& doc : _docs) {
-        threads.emplace_back(std::thread([this, &doc, &freqDictAccess, docId]() {
-            std::map<std::string, size_t> wordMap;
+        threads.emplace_back(std::thread([this, &doc, &freqDictionaryAccess, docId]() {
+            std::map<std::string, size_t> wordsMap;
             std::string currentWord;
-            for (const auto& symbol : doc) {
-                if (std::isalnum(symbol)) {
-                    currentWord += symbol;
-                }
-                else if (currentWord.length() != 0) {
-                    if (wordMap.count(currentWord) == 0) { wordMap[currentWord] = 1; }
-                    else { wordMap[currentWord] += 1; }
-                    currentWord = "";
-                }
+            std::istringstream sString {doc};
+            while (sString >> currentWord) {
+                if (wordsMap.count(currentWord) == 0) { wordsMap[currentWord] = 1; }
+                else { wordsMap[currentWord] += 1; }
             }
 
-            freqDictAccess.lock();
-            for (const auto& [word, count] : wordMap) {
+            freqDictionaryAccess.lock();
+            for (const auto& [word, count] : wordsMap) {
                 if (_freqDictionary.count(word) == 0) {
                     _freqDictionary.emplace(word, std::vector<Entry>{{docId, count}});
-                }
-                else {
-                    _freqDictionary[word].push_back(Entry{docId, count});
+                } else {
+                    _freqDictionary[word].emplace_back(Entry{docId, count});
                 }
             }
-            freqDictAccess.unlock();
+            freqDictionaryAccess.unlock();
         }));
         ++docId;
     }
@@ -47,8 +39,11 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string>& inputDocs) {
     }
 }
 
-std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word) {
+std::vector<Entry> InvertedIndex::GetWordCount(const std::string& word) {
     auto it = _freqDictionary.find(word);
-    return it->second;
+    if (it != _freqDictionary.end())
+        return it->second;
+    else
+        return {};
 }
 
