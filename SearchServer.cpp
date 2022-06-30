@@ -10,6 +10,7 @@
 
 std::vector<std::vector<RelativeIndex>> SearchServer::Search(const std::vector<std::string> &queriesInput) {
     ConverterJSON converterJson;
+    size_t responsesLimit = converterJson.GetResponsesLimit();
     std::vector<std::vector<RelativeIndex>> relativeIndex;
     for (const auto& request : queriesInput) {
         std::string currentWord;
@@ -48,7 +49,6 @@ std::vector<std::vector<RelativeIndex>> SearchServer::Search(const std::vector<s
                              return b.rank < a.rank;
                          });
 
-        size_t responsesLimit = converterJson.GetResponsesLimit();
         if (currentRelativeIndex.size() > responsesLimit) currentRelativeIndex.resize(responsesLimit);
         relativeIndex.emplace_back(currentRelativeIndex);
     }
