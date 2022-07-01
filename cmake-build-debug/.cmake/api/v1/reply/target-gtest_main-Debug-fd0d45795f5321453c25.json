@@ -73,7 +73,7 @@
 			{
 				"command" : 6,
 				"file" : 2,
-				"line" : 17,
+				"line" : 20,
 				"parent" : 7
 			},
 			{
@@ -90,7 +90,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g"
+					"fragment" : " -static -g"
 				},
 				{
 					"fragment" : "-Wall -Wshadow -Werror -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers"

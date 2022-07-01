@@ -3,21 +3,25 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <exception>
 #include "nlohmann/json.hpp"
 #include "ConverterJSON.h"
 
-std::string ConverterJSON::NormalizeFileName(std::string_view fileName) {
-    std::string normalFileName;
-    size_t startIndex = 0;
-    if (fileName[0] == '/') startIndex = 1;
-    for (size_t i = startIndex; i < fileName.length(); ++i) {
-        if (fileName[i] == '/') {
-            normalFileName += "\\";
-        } else {
-            normalFileName += fileName[i];
+void ConverterJSON::NormalizeFileNames(std::vector<std::string>& fileNames) {
+    for (auto& fileName : fileNames) {
+        if (fileName[0] == '/') fileName.erase(0, 1);
+#ifdef _WIN32
+        std::string win32FileName;
+        for (char symbol : fileName) {
+            if (symbol == '/') {
+                win32FileName += "\\";
+            } else {
+                win32FileName += symbol;
+            }
         }
+        fileName = win32FileName;
+#endif
     }
-    return normalFileName;
 }
 
 void ConverterJSON::LoadConfig() {
@@ -25,12 +29,26 @@ void ConverterJSON::LoadConfig() {
     if (configFile.is_open()) {
         nlohmann::json configJson;
         configFile >> configJson;
-        _fileNames = configJson["files"];
-        _responsesLimit = configJson["config"]["max_responses"];
-        _configIsLoaded = true;
         configFile.close();
+        if (configJson.contains("config")) {
+            try {
+                _fileNames = configJson["files"];
+                _responsesLimit = configJson["config"]["max_responses"];
+                _programName = configJson["config"]["name"];
+                _configFileVersion = configJson["config"]["version"];
+                _configIsLoaded = true;
+            } catch (...) {
+                std::cerr <<"Error: Config file has incorrect format!" << std::endl;
+                throw std::runtime_error("Config file has incorrect format!");
+            }
+            NormalizeFileNames(_fileNames);
+        } else {
+            std::cerr <<"Error: Config file is empty!" << std::endl;
+            throw std::runtime_error("Config file is empty!");
+        }
     } else {
-        throw "Config file not found!";
+        std::cerr <<"Error: Config file is missing!" << std::endl;
+        throw std::runtime_error("Config file is missing!");
     }
 }
 
@@ -47,7 +65,7 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
     if (!_configIsLoaded) LoadConfig();
     std::vector<std::string> textDocs;
     for (const auto& fileName : _fileNames) {
-        std::ifstream textFile(NormalizeFileName(fileName));
+        std::ifstream textFile(fileName);
         if (textFile.is_open()) {
             std::string text;
             textFile >> text;
@@ -59,7 +77,7 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
             textDocs.emplace_back(text);
             textFile.close();
         } else {
-            std::cerr << "File \"" << fileName << "\" is not exist!" << std::endl;
+            std::cerr << "Warning: File \"" << fileName << "\" is not exist!" << std::endl;
         }
     }
 
@@ -109,9 +127,19 @@ void ConverterJSON::PutAnswers(const std::vector<std::vector<std::pair<int, floa
             }
             ++requestNumber;
         }
-        answersFile << answersJson;
+        answersFile << std::setw(2) << answersJson;
         answersFile.close();
     } else {
-        std::cerr << "File \"answers.json\" is occupied by another process!" << std::endl;
+        std::cerr << "Warning: File \"answers.json\" is occupied by another process!" << std::endl;
     }
+}
+
+std::string ConverterJSON::GetProgramName() {
+    if (!_configIsLoaded) LoadConfig();
+    return _programName;
+}
+
+std::string ConverterJSON::GetConfigFileVersion() {
+    if (!_configIsLoaded) LoadConfig();
+    return _configFileVersion;
 }
