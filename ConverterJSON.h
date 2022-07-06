@@ -7,14 +7,14 @@
 class ConverterJSON {
 private:
     std::vector<std::string> _fileNames;
-    int _responsesLimit = 0;
+    int _responsesLimit = 5;
     std::string _programName;
     std::string _configFileVersion;
     bool _configIsLoaded = false;
 
     void LoadConfig();
     static void NormalizeFileNames(std::vector<std::string>& fileNames);
-    static std::string IndexToString3(size_t index);
+    static std::string IndexToString(size_t index);
 
 public:
     ConverterJSON() = default;
@@ -44,7 +44,16 @@ public:
 */
     void PutAnswers(const std::vector<std::vector<std::pair<int, float>>>& answers);
 
+/**
+* Метод получает имя программы из файла config.json
+* @return
+*/
     std::string GetProgramName();
+
+/**
+* Метод получает версию файла config.json
+* @return
+*/
     std::string GetConfigFileVersion();
 };
 

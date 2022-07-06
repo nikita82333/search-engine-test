@@ -1,4 +1,4 @@
-//#include <string>
+#include <string>
 #include <sstream>
 #include <vector>
 #include <fstream>
@@ -6,6 +6,7 @@
 #include <exception>
 #include "nlohmann/json.hpp"
 #include "ConverterJSON.h"
+#include "CustomExceptions.h"
 
 void ConverterJSON::NormalizeFileNames(std::vector<std::string>& fileNames) {
     for (auto& fileName : fileNames) {
@@ -31,28 +32,27 @@ void ConverterJSON::LoadConfig() {
         configFile >> configJson;
         configFile.close();
         if (configJson.contains("config")) {
+            if (configJson["config"].contains("max_responses")) {
+                _responsesLimit = configJson["config"]["max_responses"];
+            }
             try {
                 _fileNames = configJson["files"];
-                _responsesLimit = configJson["config"]["max_responses"];
                 _programName = configJson["config"]["name"];
                 _configFileVersion = configJson["config"]["version"];
                 _configIsLoaded = true;
             } catch (...) {
-                std::cerr <<"Error: Config file has incorrect format!" << std::endl;
-                throw std::runtime_error("Config file has incorrect format!");
+                throw ConfigFileIncorrect();
             }
             NormalizeFileNames(_fileNames);
         } else {
-            std::cerr <<"Error: Config file is empty!" << std::endl;
-            throw std::runtime_error("Config file is empty!");
+            throw ConfigFileEmpty();
         }
     } else {
-        std::cerr <<"Error: Config file is missing!" << std::endl;
-        throw std::runtime_error("Config file is missing!");
+        throw ConfigFileMissing();
     }
 }
 
-std::string ConverterJSON::IndexToString3(size_t index) {
+std::string ConverterJSON::IndexToString(size_t index) {
     std::ostringstream sStream;
     if (index < 1000) {
         sStream << std::setw(3) << std::setfill('0') << std::to_string(index);
@@ -77,7 +77,7 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
             textDocs.emplace_back(text);
             textFile.close();
         } else {
-            std::cerr << "Warning: File \"" << fileName << "\" is not exist!" << std::endl;
+            std::cerr << "Warning: File \"" << fileName << "\" is missing!" << std::endl;
         }
     }
 
@@ -96,8 +96,10 @@ std::vector<std::string> ConverterJSON::GetRequests() {
         nlohmann::json requestsJson;
         requestsFile >> requestsJson;
         requests = requestsJson["requests"];
+        requestsFile.close();
+    } else {
+        throw FileMissing("requests.json");
     }
-    requestsFile.close();
     return requests;
 }
 
@@ -107,7 +109,7 @@ void ConverterJSON::PutAnswers(const std::vector<std::vector<std::pair<int, floa
         nlohmann::json answersJson;
         size_t requestNumber = 1;
         for (const auto& answer : answers) {
-            std::string requestString = "request" + IndexToString3(requestNumber);
+            std::string requestString = "request" + IndexToString(requestNumber);
             answersJson["answers"][requestString];
             if (!answer.empty()) {
                 answersJson["answers"][requestString]["result"] = "true";
@@ -130,7 +132,7 @@ void ConverterJSON::PutAnswers(const std::vector<std::vector<std::pair<int, floa
         answersFile << std::setw(2) << answersJson;
         answersFile.close();
     } else {
-        std::cerr << "Warning: File \"answers.json\" is occupied by another process!" << std::endl;
+        throw FileBusy("answers.json");
     }
 }
 

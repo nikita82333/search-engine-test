@@ -91,6 +91,13 @@ build CMakeFiles/search_engine.dir/test3.cpp.obj: CXX_COMPILER__search_engine_De
   OBJECT_DIR = CMakeFiles\search_engine.dir
   OBJECT_FILE_DIR = CMakeFiles\search_engine.dir
 
+build CMakeFiles/search_engine.dir/CustomExceptions.cpp.obj: CXX_COMPILER__search_engine_Debug C$:/Users/kunv/CLionProjects/search_engine/CustomExceptions.cpp || cmake_object_order_depends_target_search_engine
+  DEP_FILE = CMakeFiles\search_engine.dir\CustomExceptions.cpp.obj.d
+  FLAGS = -static -g
+  INCLUDES = -IC:/Users/kunv/CLionProjects/search_engine/nlohmann_json/single_include -isystem C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest/include -isystem C:/Users/kunv/CLionProjects/search_engine/cmake-build-debug/_deps/googletest-src/googletest
+  OBJECT_DIR = CMakeFiles\search_engine.dir
+  OBJECT_FILE_DIR = CMakeFiles\search_engine.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target search_engine
@@ -99,7 +106,7 @@ build CMakeFiles/search_engine.dir/test3.cpp.obj: CXX_COMPILER__search_engine_De
 #############################################
 # Link the executable search_engine.exe
 
-build search_engine.exe search_engine[1]_tests.cmake | ${cmake_ninja_workdir}search_engine[1]_tests.cmake: CXX_EXECUTABLE_LINKER__search_engine_Debug CMakeFiles/search_engine.dir/main.cpp.obj CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj CMakeFiles/search_engine.dir/InvertedIndex.cpp.obj CMakeFiles/search_engine.dir/SearchServer.cpp.obj CMakeFiles/search_engine.dir/test2.cpp.obj CMakeFiles/search_engine.dir/test3.cpp.obj | lib/libgtest_maind.a lib/libgtestd.a || lib/libgtest_maind.a lib/libgtestd.a
+build search_engine.exe search_engine[1]_tests.cmake | ${cmake_ninja_workdir}search_engine[1]_tests.cmake: CXX_EXECUTABLE_LINKER__search_engine_Debug CMakeFiles/search_engine.dir/main.cpp.obj CMakeFiles/search_engine.dir/ConverterJSON.cpp.obj CMakeFiles/search_engine.dir/InvertedIndex.cpp.obj CMakeFiles/search_engine.dir/SearchServer.cpp.obj CMakeFiles/search_engine.dir/test2.cpp.obj CMakeFiles/search_engine.dir/test3.cpp.obj CMakeFiles/search_engine.dir/CustomExceptions.cpp.obj | lib/libgtest_maind.a lib/libgtestd.a || lib/libgtest_maind.a lib/libgtestd.a
   FLAGS = -static -g
   LINK_LIBRARIES = lib/libgtest_maind.a  lib/libgtestd.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\search_engine.dir
