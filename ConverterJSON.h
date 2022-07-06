@@ -29,7 +29,7 @@ public:
 /**
 * Метод считывает поле max_responses для определения предельного
 * количества ответов на один запрос
-* @return
+* @return возвращает предельное количества ответов на один запрос
 */
     int GetResponsesLimit();
 
@@ -46,13 +46,13 @@ public:
 
 /**
 * Метод получает имя программы из файла config.json
-* @return
+* @return возвращает имя программы из файла config.json
 */
     std::string GetProgramName();
 
 /**
 * Метод получает версию файла config.json
-* @return
+* @return возвращает версию файла config.json
 */
     std::string GetConfigFileVersion();
 };

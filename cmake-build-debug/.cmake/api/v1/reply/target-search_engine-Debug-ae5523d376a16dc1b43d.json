@@ -154,13 +154,6 @@
 				5,
 				6
 			]
-		},
-		{
-			"name" : "Header Files",
-			"sourceIndexes" : 
-			[
-				7
-			]
 		}
 	],
 	"sources" : 
@@ -206,11 +199,6 @@
 			"compileGroupIndex" : 0,
 			"path" : "CustomExceptions.cpp",
 			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "CustomExceptions.h",
-			"sourceGroupIndex" : 1
 		}
 	],
 	"type" : "EXECUTABLE"
